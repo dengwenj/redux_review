@@ -1,43 +1,45 @@
 import React, { Component } from 'react'
-import store from '../../redux/store'
 
 export default class Count extends Component {
-  state = { changValue: 1 }
+  state = {
+    changValue: 1,
+    count: 0,
+  }
 
   hendleChange = (e) => {
+    // const { changValue } = this.state
     this.setState({ changValue: parseInt(e.target.value) })
   }
 
   // 加
   increment = () => {
-    const { changValue } = this.state
-    store.dispatch({ type: 'increment', data: changValue })
+    const { changValue, count } = this.state
+    this.setState({ count: count + changValue })
   }
   // 减
   decrement = () => {
-    const { changValue } = this.state
-    store.dispatch({ type: 'decrement', data: changValue })
+    const { changValue, count } = this.state
+    this.setState({ count: count - changValue })
   }
   // 奇数加
   incrementOdd = () => {
-    const { changValue } = this.state
-    const count = store.getState()
+    const { changValue, count } = this.state
     if (count % 2 !== 0) {
-      store.dispatch({ type: 'increment', data: changValue })
+      this.setState({ count: count + changValue })
     }
   }
   // 异步加
   incrementAsync = () => {
-    const { changValue } = this.state
+    const { changValue, count } = this.state
     setTimeout(() => {
-      store.dispatch({ type: 'increment', data: changValue })
+      this.setState({ count: count + changValue })
     }, 1000)
   }
 
   render() {
     return (
       <div>
-        <h1>当前求和为：{store.getState()}</h1>
+        <h1>当前求和为：{this.state.count}</h1>
         <select onChange={this.hendleChange}>
           <option value="1">1</option>
           <option value="2">2</option>
