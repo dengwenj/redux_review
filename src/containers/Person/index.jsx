@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react'
 import { connect } from 'react-redux'
 
-import { createAddPersonAction } from '../../redux/actions/person'
+import { addPerson } from '../../redux/actions/person'
 
 class Person extends Component {
   ageNode = createRef()
@@ -40,12 +40,13 @@ class Person extends Component {
   }
 }
 
+// 容器组件
 export default connect(
   (state) => ({
-    persons: state.rens,
-    count: state.he,
+    persons: state.person,
+    count: state.count,
   }),
   {
-    addPerson: createAddPersonAction,
+    addPerson,
   }
 )(Person)

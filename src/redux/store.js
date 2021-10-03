@@ -3,24 +3,17 @@
 */
 
 // 引入 createStore，专门用于创建 redux 中最为核心的 store 对象
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 // 引入 redux-thunk 用于 异步 action
 import thunk from 'redux-thunk'
-// 引入 countReducer
-import countReducer from './reducers/count'
-// 引入 personReducer
-import personReducer from './reducers/person'
-// 引入
+// 引入 redux-devtools-extension
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-// 汇总所有 reducer
-const allReducer = combineReducers({
-  he: countReducer,
-  rens: personReducer,
-})
+// 引入汇总之后的 reducer
+import reducers from './reducers'
 
 // 创建 stroe 对象并暴露
 export default createStore(
-  allReducer,
+  reducers,
   composeWithDevTools(applyMiddleware(thunk))
 )

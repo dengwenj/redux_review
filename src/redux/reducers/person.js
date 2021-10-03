@@ -12,4 +12,4 @@ export default function personReducer(perState = initState, action) {
       return perState
   }
 }
-// 要是一个纯函数
+// 要是一个纯函数，不然页面不更新
