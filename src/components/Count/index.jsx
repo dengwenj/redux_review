@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import store from '../../redux/store'
 import { increment, decrement, asyncAction } from '../../redux/count_action'
 
-export default class Count extends Component {
+class Count extends Component {
   state = {
     n: 1,
   }
@@ -15,28 +16,31 @@ export default class Count extends Component {
   increment = () => {
     const { n } = this.state
 
-    store.dispatch(increment(n))
+    // 在 ul 组件中看不到关于 redux 任何东西
+    this.props.increment(n)
   }
 
   decrement = () => {
     const { n } = this.state
-    store.dispatch(decrement(n))
+    this.props.decrement(n)
   }
 
   incrementOdd = () => {
     const { n } = this.state
     const count = store.getState()
     if (count % 2 !== 0) {
-      store.dispatch(increment(n))
+      this.props.increment(n)
     }
   }
 
   incrementAsync = () => {
     const { n } = this.state
-    store.dispatch(asyncAction(n, 1000))
+    // store.dispatch(asyncAction(n, 1000))
+    this.props.asyncAction(n, 1000)
   }
 
   render() {
+    console.log(this)
     return (
       <div>
         <h2>当前求和为：{store.getState()}</h2>
@@ -54,3 +58,29 @@ export default class Count extends Component {
     )
   }
 }
+
+export default connect(
+  (state) => {
+    return {
+      count: state,
+    }
+  }, // 数据的
+  // (dispatch) => {
+  //   return {
+  //     increment(data) {
+  //       dispatch(increment(data))
+  //     },
+  //     decrement(data) {
+  //       dispatch(decrement(data))
+  //     },
+  //     asyncAction(data, timer) {
+  //       dispatch(asyncAction(data, timer))
+  //     },
+  //   }
+  // } // 操作方法的
+  {
+    increment, // 是一个函数 返回的就是 action 要个 action 就行了,底层会自己加 dispatch
+    decrement,
+    asyncAction,
+  }
+)(Count)
