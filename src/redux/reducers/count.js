@@ -1,6 +1,6 @@
 // 改文件用于加工
 
-import { INCREMENT, DECREMENT } from './constan'
+import { INCREMENT, DECREMENT } from '../constan'
 
 const init = 0
 export default function countReducer(pre = init, action) {

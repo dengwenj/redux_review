@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import store from '../../redux/store'
-import { increment, decrement, asyncAction } from '../../redux/count_action'
+import { increment, decrement, asyncAction } from '../../redux/action/count'
 
 class Count extends Component {
   state = {
@@ -27,7 +26,7 @@ class Count extends Component {
 
   incrementOdd = () => {
     const { n } = this.state
-    const count = store.getState()
+    const { count } = this.props
     if (count % 2 !== 0) {
       this.props.increment(n)
     }
@@ -40,10 +39,11 @@ class Count extends Component {
   }
 
   render() {
-    console.log(this)
+    const { count, person } = this.props
     return (
       <div>
-        <h2>当前求和为：{store.getState()}</h2>
+        <h2>当前求和为：{count}</h2>
+        <h3>下方组件的人数为：{person.length}</h3>
         <select name="" id="" onChange={this.handleChange}>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -62,7 +62,8 @@ class Count extends Component {
 export default connect(
   (state) => {
     return {
-      count: state,
+      count: state.countReducer,
+      person: state.personReducer,
     }
   }, // 数据的
   // (dispatch) => {

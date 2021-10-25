@@ -1,6 +1,6 @@
 // action 对象
 
-import { INCREMENT, DECREMENT } from './constan'
+import { INCREMENT, DECREMENT } from '../constan'
 
 // 加
 export const increment = (data) => ({ type: INCREMENT, data })
