@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import store from '../../redux/store'
-import { increment, decrement } from '../../redux/count_action'
+import { increment, decrement, asyncAction } from '../../redux/count_action'
 
 export default class Count extends Component {
   state = {
@@ -32,10 +32,8 @@ export default class Count extends Component {
   }
 
   incrementAsync = () => {
-    setTimeout(() => {
-      const { n } = this.state
-      store.dispatch(increment(n))
-    }, 1000)
+    const { n } = this.state
+    store.dispatch(asyncAction(n, 1000))
   }
 
   render() {
