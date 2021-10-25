@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
+import store from '../../redux/store'
+import { increment, decrement } from '../../redux/count_action'
+
 export default class Count extends Component {
   state = {
-    count: 0,
     n: 1,
   }
 
@@ -11,42 +13,35 @@ export default class Count extends Component {
   }
 
   increment = () => {
-    const { count, n } = this.state
-    this.setState({
-      count: count + n,
-    })
+    const { n } = this.state
+
+    store.dispatch(increment(n))
   }
 
   decrement = () => {
-    const { count, n } = this.state
-    this.setState({
-      count: count - n,
-    })
+    const { n } = this.state
+    store.dispatch(decrement(n))
   }
 
   incrementOdd = () => {
-    const { count, n } = this.state
+    const { n } = this.state
+    const count = store.getState()
     if (count % 2 !== 0) {
-      this.setState({
-        count: count + n,
-      })
+      store.dispatch(increment(n))
     }
   }
 
   incrementAsync = () => {
     setTimeout(() => {
-      const { count, n } = this.state
-      this.setState({
-        count: count + n,
-      })
+      const { n } = this.state
+      store.dispatch(increment(n))
     }, 1000)
   }
 
   render() {
-    const { count } = this.state
     return (
       <div>
-        <h2>当前求和为：{count}</h2>
+        <h2>当前求和为：{store.getState()}</h2>
         <select name="" id="" onChange={this.handleChange}>
           <option value="1">1</option>
           <option value="2">2</option>
