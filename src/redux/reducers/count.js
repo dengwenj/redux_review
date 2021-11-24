@@ -12,6 +12,8 @@ export default function countReducer(pre = init, action) {
       return (pre += data)
     case DECREMENT:
       return (pre -= data)
+    case 'dwj':
+      return pre += data
     default:
       return pre
   }
