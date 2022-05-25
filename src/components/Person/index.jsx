@@ -18,7 +18,12 @@ class Person extends Component {
   }
 
   asyncAdd = () => {
-    this.props.asyncPerson()
+    const res = this.props.asyncPerson()
+    res.then((res) => {
+      console.log(res);
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   render() {
