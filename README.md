@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# redux中使用useSelector、useDispatch替代connect
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+与 一样`connect()`，应该首先将整个应用程序包装在一个`<Provider>`组件中，以使存储在整个组件树中可用
 
-## Available Scripts
+```jsx
+const store = createStore(rootReducer)
 
-In the project directory, you can run:
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
 
-### `npm start`
+``useSelector``
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+主要作用： 从`redux`的`store`对象中提取数据(`state`)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```jsx
+const zState = useSelector(state => state)
+```
 
-### `npm test`
+`useState`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+const store = useStore()
+```
 
-### `npm run build`
+这个`Hook`返回`redux` `<Provider>`组件的`store`对象的引用
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`useDispatch`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+主要作用：就是操作状态的方法
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```jsx
+    const state = useSelector(state => state) // 就是用来获取状态的
+    const dispatch = useDispatch() // 用来操作状态的方法 
+    const store = useStore()
+    console.log(store);
+    console.log(dispatch);
+    console.log(state);
 
-### `npm run eject`
+    const headleClick = () => {
+        dispatch({type:'dwj', data:'dwj and weiwei'})
+    }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    return (
+        <div>
+            <h3>{state.countReducer}</h3>
+            <button onClick={headleClick}>点击</button>
+        </div>
+    )		
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### useSelector
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* useSelector 第二个参数没传，即使当前组件数据没有变也会重新渲染组件，因为 useSelector 每次都会执行，返回的对象是不一样的。
+* 第二个参数是函数，比较的是返回值（第一个参数的返回值，前一次与这一次）的相不相等
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```JS
+// 比较的是第一个参数的返回值是否一样 newSelectedState, latestSelectedState.current
+// 一样就不执行后面了。 useSelectore 不写第二个参数永远不一样，因为每次执行函数都会返回新的对象
+if (equalityFn(newSelectedState, latestSelectedState.current)) {
+	return
+}
+// useSelectore 不写第二个参数永远不一样，因为每次执行函数都会返回新的对象，这就会导致项目里面写了多少个 useSelector 就会重新渲染多少次 ！！！！！！！！！8
+// 写了第二个参数的话，就会确定组件里面依赖的数据有没有变化，没有变化不会重新渲染
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// 返回值不一样的情况   
+latestSelectedState.current = newSelectedState
+latestStoreState.current = newStoreState
+```
